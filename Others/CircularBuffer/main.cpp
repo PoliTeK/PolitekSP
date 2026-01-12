@@ -6,8 +6,8 @@ using namespace daisy;
 using namespace daisysp;
 
 
-const size_t buffsize = 1048576; // 1MB
-float DSY_SDRAM_BSS buff[buffsize];
+const size_t BUFF_MAX_SIZE = 1048576 ; // 1MB
+float DSY_SDRAM_BSS buff[BUFF_MAX_SIZE]; // allocazione della DRAM
 
 
 volatile bool fBack = false;
@@ -55,7 +55,8 @@ int main(void)
     button.Init(daisy::seed::D28, GPIO::Mode::INPUT, GPIO::Pull::PULLUP);
 
     
-    mBuff.Init(buff, buffsize);
+    mBuff.Init(buff, BUFF_MAX_SIZE, sample_rate);
+    mBuff.SetBuffSize(120, 64);
 
     // Start
     hw.StartAudio(AudioCallback);

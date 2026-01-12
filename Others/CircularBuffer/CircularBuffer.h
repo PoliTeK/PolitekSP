@@ -15,10 +15,10 @@ public:
         BACKWARD = -1
         };
 
-    // Inizializza passando il puntatore all'array in SDRAM e la sua grandezza
-    void Init(float* buffer_array, size_t size);
+    void Init(float* buffer_array, size_t size, float fs);
 
-    // Scrive un campione e avanza la testina
+    void SetBuffSize(float bpm, uint8_t steps, float scale = 1); // TODO Scl
+
     void Write(float input);
 
     void SetMode(ReadMode mode);
@@ -28,8 +28,16 @@ public:
 
 private:
     float* _buffer;      // Puntatore all'array vero
-    size_t _size;        // Grandezza totale
-    size_t _mask; // Maschera per wrap around
+    size_t _MAX_SIZE;        // Grandezza totale
+    float _fs;
+
+    size_t _buff_dim;
+    float _buff_time;
+
+    float _bpm, _scale;
+    uint8_t _steps;
+    
+
     size_t _h;  // testina 
 
     int8_t _mode;

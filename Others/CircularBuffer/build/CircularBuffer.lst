@@ -1,4 +1,4 @@
-ARM GAS  C:\Users\skipi\AppData\Local\Temp\ccJdYT9p.s 			page 1
+ARM GAS  C:\Users\skipi\AppData\Local\Temp\cc4JrcnA.s 			page 1
 
 
    1              		.cpu cortex-m7
@@ -16,235 +16,444 @@ ARM GAS  C:\Users\skipi\AppData\Local\Temp\ccJdYT9p.s 			page 1
   13              		.text
   14              	.Ltext0:
   15              		.cfi_sections	.debug_frame
-  16              		.section	.text._ZN14CircularBuffer4InitEPfj,"ax",%progbits
+  16              		.section	.text._ZN14CircularBuffer4InitEPfjf,"ax",%progbits
   17              		.align	1
   18              		.p2align 2,,3
-  19              		.global	_ZN14CircularBuffer4InitEPfj
+  19              		.global	_ZN14CircularBuffer4InitEPfjf
   20              		.arch armv7e-m
   21              		.syntax unified
   22              		.thumb
   23              		.thumb_func
   24              		.fpu fpv5-d16
-  26              	_ZN14CircularBuffer4InitEPfj:
+  26              	_ZN14CircularBuffer4InitEPfjf:
   27              	.LVL0:
   28              	.LFB567:
   29              		.file 1 "CircularBuffer.cpp"
    1:CircularBuffer.cpp **** #include "CircularBuffer.h"
    2:CircularBuffer.cpp **** 
-   3:CircularBuffer.cpp **** void CircularBuffer::Init(float* buffer_array, size_t size) {
-  30              		.loc 1 3 61 view -0
+   3:CircularBuffer.cpp **** void CircularBuffer::Init(float* buffer_array, size_t size, float fs) {
+  30              		.loc 1 3 71 view -0
   31              		.cfi_startproc
   32              		@ args = 0, pretend = 0, frame = 0
   33              		@ frame_needed = 0, uses_anonymous_args = 0
   34              		@ link register save eliminated.
    4:CircularBuffer.cpp ****     _buffer = buffer_array;
   35              		.loc 1 4 5 view .LVU1
-   5:CircularBuffer.cpp ****     _size = size  ;
-   6:CircularBuffer.cpp ****     _mask = size - 1; 
-   7:CircularBuffer.cpp ****     _h = _mask;
+   3:CircularBuffer.cpp ****     _buffer = buffer_array;
+  36              		.loc 1 3 71 is_stmt 0 view .LVU2
+  37 0000 10B4     		push	{r4}
+  38              		.cfi_def_cfa_offset 4
+  39              		.cfi_offset 4, -4
+   5:CircularBuffer.cpp ****     _MAX_SIZE = size;
+   6:CircularBuffer.cpp ****     _buff_dim = _MAX_SIZE; 
+   7:CircularBuffer.cpp **** 
+   8:CircularBuffer.cpp ****     _h = _buff_dim -1;
+   9:CircularBuffer.cpp ****     _mode = 0;
+  40              		.loc 1 9 11 view .LVU3
+  41 0002 0023     		movs	r3, #0
    8:CircularBuffer.cpp ****     _mode = 0;
-  36              		.loc 1 8 11 is_stmt 0 view .LVU2
-  37 0000 4FF0000C 		mov	ip, #0
-   6:CircularBuffer.cpp ****     _h = _mask;
-  38              		.loc 1 6 18 view .LVU3
-  39 0004 531E     		subs	r3, r2, #1
-   5:CircularBuffer.cpp ****     _size = size  ;
-  40              		.loc 1 5 11 view .LVU4
-  41 0006 C0E90012 		strd	r1, r2, [r0]
-   6:CircularBuffer.cpp ****     _h = _mask;
-  42              		.loc 1 6 5 is_stmt 1 view .LVU5
-  43              		.loc 1 8 11 is_stmt 0 view .LVU6
-  44 000a A0F810C0 		strh	ip, [r0, #16]	@ movhi
-   7:CircularBuffer.cpp ****     _mode = 0;
-  45              		.loc 1 7 8 view .LVU7
-  46 000e C0E90233 		strd	r3, r3, [r0, #8]
-ARM GAS  C:\Users\skipi\AppData\Local\Temp\ccJdYT9p.s 			page 2
+  42              		.loc 1 8 20 view .LVU4
+  43 0004 541E     		subs	r4, r2, #1
+  10:CircularBuffer.cpp ****     _fs = fs;
+  44              		.loc 1 10 9 view .LVU5
+  45 0006 80ED020A 		vstr.32	s0, [r0, #8]
+   8:CircularBuffer.cpp ****     _mode = 0;
+ARM GAS  C:\Users\skipi\AppData\Local\Temp\cc4JrcnA.s 			page 2
 
 
-  47              		.loc 1 8 5 is_stmt 1 view .LVU8
-   9:CircularBuffer.cpp **** 
-  10:CircularBuffer.cpp ****     _write_block = false;
-  48              		.loc 1 10 5 view .LVU9
-  11:CircularBuffer.cpp **** }
-  49              		.loc 1 11 1 is_stmt 0 view .LVU10
-  50 0012 7047     		bx	lr
-  51              		.cfi_endproc
-  52              	.LFE567:
-  54              		.section	.text._ZN14CircularBuffer5WriteEf,"ax",%progbits
-  55              		.align	1
-  56              		.p2align 2,,3
-  57              		.global	_ZN14CircularBuffer5WriteEf
-  58              		.syntax unified
-  59              		.thumb
-  60              		.thumb_func
-  61              		.fpu fpv5-d16
-  63              	_ZN14CircularBuffer5WriteEf:
-  64              	.LVL1:
-  65              	.LFB568:
-  12:CircularBuffer.cpp **** 
-  13:CircularBuffer.cpp **** void CircularBuffer::Write(float input) {
-  66              		.loc 1 13 41 is_stmt 1 view -0
-  67              		.cfi_startproc
-  68              		@ args = 0, pretend = 0, frame = 0
-  69              		@ frame_needed = 0, uses_anonymous_args = 0
-  70              		@ link register save eliminated.
-  14:CircularBuffer.cpp ****    if (_write_block == false) {
-  71              		.loc 1 14 4 view .LVU12
-  72 0000 437C     		ldrb	r3, [r0, #17]	@ zero_extendqisi2
-  73 0002 4BB9     		cbnz	r3, .L3
-  15:CircularBuffer.cpp ****         _h = (_h + 1) & _mask;
-  74              		.loc 1 15 9 view .LVU13
-  16:CircularBuffer.cpp ****         _buffer[_h] = input;
-  75              		.loc 1 16 21 is_stmt 0 view .LVU14
-  76 0004 0268     		ldr	r2, [r0]
-  15:CircularBuffer.cpp ****         _h = (_h + 1) & _mask;
-  77              		.loc 1 15 23 view .LVU15
-  78 0006 D0E90213 		ldrd	r1, r3, [r0, #8]
-  15:CircularBuffer.cpp ****         _h = (_h + 1) & _mask;
-  79              		.loc 1 15 18 view .LVU16
-  80 000a 0133     		adds	r3, r3, #1
-  15:CircularBuffer.cpp ****         _h = (_h + 1) & _mask;
-  81              		.loc 1 15 23 view .LVU17
-  82 000c 0B40     		ands	r3, r3, r1
-  83              		.loc 1 16 21 view .LVU18
-  84 000e 02EB8302 		add	r2, r2, r3, lsl #2
-  15:CircularBuffer.cpp ****         _h = (_h + 1) & _mask;
-  85              		.loc 1 15 12 view .LVU19
-  86 0012 C360     		str	r3, [r0, #12]
-  87              		.loc 1 16 9 is_stmt 1 view .LVU20
-  88              		.loc 1 16 21 is_stmt 0 view .LVU21
-  89 0014 82ED000A 		vstr.32	s0, [r2]
-  90              	.L3:
-  17:CircularBuffer.cpp ****     }
-  18:CircularBuffer.cpp ****     
-  19:CircularBuffer.cpp **** }
-ARM GAS  C:\Users\skipi\AppData\Local\Temp\ccJdYT9p.s 			page 3
+  46              		.loc 1 8 8 view .LVU6
+  47 000a 0462     		str	r4, [r0, #32]
+   6:CircularBuffer.cpp **** 
+  48              		.loc 1 6 15 view .LVU7
+  49 000c C260     		str	r2, [r0, #12]
+  11:CircularBuffer.cpp **** 
+  12:CircularBuffer.cpp ****     _write_block = false;
+  13:CircularBuffer.cpp **** }
+  50              		.loc 1 13 1 view .LVU8
+  51 000e 5DF8044B 		ldr	r4, [sp], #4
+  52              		.cfi_restore 4
+  53              		.cfi_def_cfa_offset 0
+   9:CircularBuffer.cpp ****     _fs = fs;
+  54              		.loc 1 9 11 view .LVU9
+  55 0012 8384     		strh	r3, [r0, #36]	@ movhi
+   5:CircularBuffer.cpp ****     _buff_dim = _MAX_SIZE; 
+  56              		.loc 1 5 15 view .LVU10
+  57 0014 C0E90012 		strd	r1, r2, [r0]
+   6:CircularBuffer.cpp **** 
+  58              		.loc 1 6 5 is_stmt 1 view .LVU11
+   8:CircularBuffer.cpp ****     _mode = 0;
+  59              		.loc 1 8 5 view .LVU12
+   9:CircularBuffer.cpp ****     _fs = fs;
+  60              		.loc 1 9 5 view .LVU13
+  10:CircularBuffer.cpp **** 
+  61              		.loc 1 10 5 view .LVU14
+  12:CircularBuffer.cpp **** }
+  62              		.loc 1 12 5 view .LVU15
+  63              		.loc 1 13 1 is_stmt 0 view .LVU16
+  64 0018 7047     		bx	lr
+  65              		.cfi_endproc
+  66              	.LFE567:
+  68 001a 00BF     		.section	.text._ZN14CircularBuffer11SetBuffSizeEfhf,"ax",%progbits
+  69              		.align	1
+  70              		.p2align 2,,3
+  71              		.global	_ZN14CircularBuffer11SetBuffSizeEfhf
+  72              		.syntax unified
+  73              		.thumb
+  74              		.thumb_func
+  75              		.fpu fpv5-d16
+  77              	_ZN14CircularBuffer11SetBuffSizeEfhf:
+  78              	.LVL1:
+  79              	.LFB568:
+  14:CircularBuffer.cpp **** // TODO trovare un modo sicuro per avere variazioni di tempo -- decimazione / interpolazioni per al
+  15:CircularBuffer.cpp **** void CircularBuffer::SetBuffSize(float bpm, uint8_t steps, float scale){
+  80              		.loc 1 15 72 is_stmt 1 view -0
+  81              		.cfi_startproc
+  82              		@ args = 0, pretend = 0, frame = 0
+  83              		@ frame_needed = 0, uses_anonymous_args = 0
+  84              		@ link register save eliminated.
+  16:CircularBuffer.cpp ****     _bpm = bpm;
+  85              		.loc 1 16 5 view .LVU18
+  17:CircularBuffer.cpp ****     _steps = steps;
+  18:CircularBuffer.cpp ****     _scale = scale;
+  19:CircularBuffer.cpp **** 
+  20:CircularBuffer.cpp ****     _buff_time = (15.0f * ((float)steps/scale) / bpm ) ;
+  86              		.loc 1 20 28 is_stmt 0 view .LVU19
+ARM GAS  C:\Users\skipi\AppData\Local\Temp\cc4JrcnA.s 			page 3
 
 
-  91              		.loc 1 19 1 view .LVU22
-  92 0018 7047     		bx	lr
-  93              		.cfi_endproc
-  94              	.LFE568:
-  96 001a 00BF     		.section	.text._ZN14CircularBuffer7SetModeENS_8ReadModeE,"ax",%progbits
-  97              		.align	1
-  98              		.p2align 2,,3
-  99              		.global	_ZN14CircularBuffer7SetModeENS_8ReadModeE
- 100              		.syntax unified
- 101              		.thumb
- 102              		.thumb_func
- 103              		.fpu fpv5-d16
- 105              	_ZN14CircularBuffer7SetModeENS_8ReadModeE:
- 106              	.LVL2:
- 107              	.LFB569:
-  20:CircularBuffer.cpp **** void CircularBuffer::SetMode(ReadMode mode)
-  21:CircularBuffer.cpp **** {
- 108              		.loc 1 21 1 is_stmt 1 view -0
- 109              		.cfi_startproc
- 110              		@ args = 0, pretend = 0, frame = 0
- 111              		@ frame_needed = 0, uses_anonymous_args = 0
- 112              		@ link register save eliminated.
-  22:CircularBuffer.cpp ****     _mode = mode;
- 113              		.loc 1 22 5 view .LVU24
-  23:CircularBuffer.cpp ****     if(mode == -1){
- 114              		.loc 1 23 5 is_stmt 0 view .LVU25
- 115 0000 A1F1FF33 		sub	r3, r1, #-1
-  22:CircularBuffer.cpp ****     _mode = mode;
- 116              		.loc 1 22 11 view .LVU26
- 117 0004 0174     		strb	r1, [r0, #16]
- 118              		.loc 1 23 5 is_stmt 1 view .LVU27
- 119 0006 B3FA83F3 		clz	r3, r3
- 120 000a 5B09     		lsrs	r3, r3, #5
- 121 000c 4374     		strb	r3, [r0, #17]
-  24:CircularBuffer.cpp ****         _write_block = true;
-  25:CircularBuffer.cpp **** 
-  26:CircularBuffer.cpp ****     }else {
-  27:CircularBuffer.cpp ****         _write_block = false;
+  87 0000 07EE901A 		vmov	s15, r1	@ int
+  88              		.loc 1 20 25 view .LVU20
+  89 0004 F2EE0E6A 		vmov.f32	s13, #1.5e+1
+  21:CircularBuffer.cpp ****     _buff_dim = (size_t)(_buff_time * _fs);
+  22:CircularBuffer.cpp **** 
+  23:CircularBuffer.cpp ****     if (_buff_dim > _MAX_SIZE) {
+  90              		.loc 1 23 21 view .LVU21
+  91 0008 4268     		ldr	r2, [r0, #4]
+  20:CircularBuffer.cpp ****     _buff_dim = (size_t)(_buff_time * _fs);
+  92              		.loc 1 20 28 view .LVU22
+  93 000a F8EE677A 		vcvt.f32.u32	s15, s15
+  16:CircularBuffer.cpp ****     _steps = steps;
+  94              		.loc 1 16 10 view .LVU23
+  95 000e 80ED050A 		vstr.32	s0, [r0, #20]
+  17:CircularBuffer.cpp ****     _scale = scale;
+  96              		.loc 1 17 5 is_stmt 1 view .LVU24
+  17:CircularBuffer.cpp ****     _scale = scale;
+  97              		.loc 1 17 12 is_stmt 0 view .LVU25
+  98 0012 0177     		strb	r1, [r0, #28]
+  18:CircularBuffer.cpp **** 
+  99              		.loc 1 18 5 is_stmt 1 view .LVU26
+  18:CircularBuffer.cpp **** 
+ 100              		.loc 1 18 12 is_stmt 0 view .LVU27
+ 101 0014 C0ED060A 		vstr.32	s1, [r0, #24]
+  20:CircularBuffer.cpp ****     _buff_dim = (size_t)(_buff_time * _fs);
+ 102              		.loc 1 20 5 is_stmt 1 view .LVU28
+  20:CircularBuffer.cpp ****     _buff_dim = (size_t)(_buff_time * _fs);
+ 103              		.loc 1 20 40 is_stmt 0 view .LVU29
+ 104 0018 87EEA07A 		vdiv.f32	s14, s15, s1
+  21:CircularBuffer.cpp **** 
+ 105              		.loc 1 21 37 view .LVU30
+ 106 001c D0ED027A 		vldr.32	s15, [r0, #8]
+  20:CircularBuffer.cpp ****     _buff_dim = (size_t)(_buff_time * _fs);
+ 107              		.loc 1 20 25 view .LVU31
+ 108 0020 27EE267A 		vmul.f32	s14, s14, s13
+  20:CircularBuffer.cpp ****     _buff_dim = (size_t)(_buff_time * _fs);
+ 109              		.loc 1 20 48 view .LVU32
+ 110 0024 C7EE006A 		vdiv.f32	s13, s14, s0
+  21:CircularBuffer.cpp **** 
+ 111              		.loc 1 21 37 view .LVU33
+ 112 0028 66EEA77A 		vmul.f32	s15, s13, s15
+  20:CircularBuffer.cpp ****     _buff_dim = (size_t)(_buff_time * _fs);
+ 113              		.loc 1 20 16 view .LVU34
+ 114 002c C0ED046A 		vstr.32	s13, [r0, #16]
+  21:CircularBuffer.cpp **** 
+ 115              		.loc 1 21 5 is_stmt 1 view .LVU35
+  21:CircularBuffer.cpp **** 
+ 116              		.loc 1 21 17 is_stmt 0 view .LVU36
+ 117 0030 FCEEE77A 		vcvt.u32.f32	s15, s15
+ 118 0034 17EE903A 		vmov	r3, s15	@ int
+  21:CircularBuffer.cpp **** 
+ 119              		.loc 1 21 15 view .LVU37
+ 120 0038 C0ED037A 		vstr.32	s15, [r0, #12]	@ int
+ 121              		.loc 1 23 5 is_stmt 1 view .LVU38
+ 122 003c 9342     		cmp	r3, r2
+ 123 003e 01D9     		bls	.L5
+  24:CircularBuffer.cpp ****         _buff_dim = _MAX_SIZE;
+ARM GAS  C:\Users\skipi\AppData\Local\Temp\cc4JrcnA.s 			page 4
+
+
+ 124              		.loc 1 24 9 view .LVU39
+ 125 0040 1346     		mov	r3, r2
+ 126              		.loc 1 24 19 is_stmt 0 view .LVU40
+ 127 0042 C260     		str	r2, [r0, #12]
+ 128              	.L5:
+  25:CircularBuffer.cpp ****     } 
+  26:CircularBuffer.cpp ****     if (_buff_dim < 10) {
+ 129              		.loc 1 26 5 is_stmt 1 view .LVU41
+ 130 0044 092B     		cmp	r3, #9
+ 131 0046 02D8     		bhi	.L6
+  27:CircularBuffer.cpp ****         _buff_dim = 10;
+ 132              		.loc 1 27 9 view .LVU42
+ 133              		.loc 1 27 19 is_stmt 0 view .LVU43
+ 134 0048 0A22     		movs	r2, #10
+ 135 004a 1346     		mov	r3, r2
+ 136 004c C260     		str	r2, [r0, #12]
+ 137              	.L6:
   28:CircularBuffer.cpp ****     }
-  29:CircularBuffer.cpp ****         
-  30:CircularBuffer.cpp **** }
- 122              		.loc 1 30 1 is_stmt 0 view .LVU28
- 123 000e 7047     		bx	lr
- 124              		.cfi_endproc
- 125              	.LFE569:
- 127              		.section	.text._ZN14CircularBuffer4ReadEv,"ax",%progbits
- 128              		.align	1
- 129              		.p2align 2,,3
- 130              		.global	_ZN14CircularBuffer4ReadEv
- 131              		.syntax unified
- 132              		.thumb
- 133              		.thumb_func
- 134              		.fpu fpv5-d16
- 136              	_ZN14CircularBuffer4ReadEv:
- 137              	.LVL3:
- 138              	.LFB570:
-  31:CircularBuffer.cpp **** float CircularBuffer::Read() 
-ARM GAS  C:\Users\skipi\AppData\Local\Temp\ccJdYT9p.s 			page 4
+  29:CircularBuffer.cpp **** 
+  30:CircularBuffer.cpp ****     if (_h >= _buff_dim) {
+ 138              		.loc 1 30 5 is_stmt 1 view .LVU44
+ 139              		.loc 1 30 9 is_stmt 0 view .LVU45
+ 140 004e 026A     		ldr	r2, [r0, #32]
+ 141              		.loc 1 30 5 view .LVU46
+ 142 0050 9A42     		cmp	r2, r3
+ 143 0052 04D3     		bcc	.L4
+  31:CircularBuffer.cpp ****         _h = _h % _buff_dim;
+ 144              		.loc 1 31 9 is_stmt 1 view .LVU47
+ 145              		.loc 1 31 17 is_stmt 0 view .LVU48
+ 146 0054 B2FBF3F1 		udiv	r1, r2, r3
+ 147              	.LVL2:
+ 148              		.loc 1 31 17 view .LVU49
+ 149 0058 03FB1123 		mls	r3, r3, r1, r2
+ 150              		.loc 1 31 12 view .LVU50
+ 151 005c 0362     		str	r3, [r0, #32]
+ 152              	.L4:
+  32:CircularBuffer.cpp ****     }
+  33:CircularBuffer.cpp **** 
+  34:CircularBuffer.cpp **** }
+ 153              		.loc 1 34 1 view .LVU51
+ 154 005e 7047     		bx	lr
+ 155              		.cfi_endproc
+ 156              	.LFE568:
+ 158              		.section	.text._ZN14CircularBuffer5WriteEf,"ax",%progbits
+ 159              		.align	1
+ 160              		.p2align 2,,3
+ 161              		.global	_ZN14CircularBuffer5WriteEf
+ 162              		.syntax unified
+ 163              		.thumb
+ 164              		.thumb_func
+ 165              		.fpu fpv5-d16
+ 167              	_ZN14CircularBuffer5WriteEf:
+ 168              	.LVL3:
+ 169              	.LFB569:
+  35:CircularBuffer.cpp **** 
+  36:CircularBuffer.cpp **** void CircularBuffer::Write(float input) {
+ 170              		.loc 1 36 41 is_stmt 1 view -0
+ARM GAS  C:\Users\skipi\AppData\Local\Temp\cc4JrcnA.s 			page 5
 
 
-  32:CircularBuffer.cpp **** {
- 139              		.loc 1 32 1 is_stmt 1 view -0
- 140              		.cfi_startproc
- 141              		@ args = 0, pretend = 0, frame = 0
- 142              		@ frame_needed = 0, uses_anonymous_args = 0
- 143              		@ link register save eliminated.
-  33:CircularBuffer.cpp ****     float output = 0.0f;
- 144              		.loc 1 33 5 view .LVU30
-  34:CircularBuffer.cpp ****     output = _buffer[_h];
- 145              		.loc 1 34 5 view .LVU31
- 146              		.loc 1 34 22 is_stmt 0 view .LVU32
- 147 0000 C168     		ldr	r1, [r0, #12]
- 148              		.loc 1 34 12 view .LVU33
- 149 0002 0268     		ldr	r2, [r0]
-  35:CircularBuffer.cpp ****     _h  = (_h + _mode) & _mask;
- 150              		.loc 1 35 17 view .LVU34
- 151 0004 90F91030 		ldrsb	r3, [r0, #16]
-  34:CircularBuffer.cpp ****     output = _buffer[_h];
- 152              		.loc 1 34 12 view .LVU35
- 153 0008 02EB8102 		add	r2, r2, r1, lsl #2
- 154              		.loc 1 35 15 view .LVU36
- 155 000c 0B44     		add	r3, r3, r1
-  34:CircularBuffer.cpp ****     output = _buffer[_h];
- 156              		.loc 1 34 12 view .LVU37
- 157 000e 92ED000A 		vldr.32	s0, [r2]
- 158              	.LVL4:
- 159              		.loc 1 35 5 is_stmt 1 view .LVU38
- 160              		.loc 1 35 24 is_stmt 0 view .LVU39
- 161 0012 8268     		ldr	r2, [r0, #8]
- 162 0014 1340     		ands	r3, r3, r2
- 163              		.loc 1 35 9 view .LVU40
- 164 0016 C360     		str	r3, [r0, #12]
-  36:CircularBuffer.cpp ****     return output;
- 165              		.loc 1 36 5 is_stmt 1 view .LVU41
-  37:CircularBuffer.cpp ****     
-  38:CircularBuffer.cpp **** }
- 166              		.loc 1 38 1 is_stmt 0 view .LVU42
- 167 0018 7047     		bx	lr
- 168              		.cfi_endproc
- 169              	.LFE570:
- 171 001a 00BF     		.text
- 172              	.Letext0:
- 173              		.file 2 "c:\\program files\\daisytoolchain\\arm-none-eabi\\include\\machine\\_default_types.h"
- 174              		.file 3 "c:\\program files\\daisytoolchain\\arm-none-eabi\\include\\sys\\_stdint.h"
- 175              		.file 4 "c:\\program files\\daisytoolchain\\lib\\gcc\\arm-none-eabi\\10.2.1\\include\\stddef.h"
- 176              		.file 5 "c:\\program files\\daisytoolchain\\arm-none-eabi\\include\\c++\\10.2.1\\cmath"
- 177              		.file 6 "c:\\program files\\daisytoolchain\\arm-none-eabi\\include\\c++\\10.2.1\\bits\\std_abs.h"
- 178              		.file 7 "c:\\program files\\daisytoolchain\\arm-none-eabi\\include\\c++\\10.2.1\\arm-none-eabi\\th
- 179              		.file 8 "c:\\program files\\daisytoolchain\\arm-none-eabi\\include\\math.h"
- 180              		.file 9 "c:\\program files\\daisytoolchain\\arm-none-eabi\\include\\c++\\10.2.1\\math.h"
- 181              		.file 10 "CircularBuffer.h"
- 182              		.file 11 "<built-in>"
-ARM GAS  C:\Users\skipi\AppData\Local\Temp\ccJdYT9p.s 			page 5
+ 171              		.cfi_startproc
+ 172              		@ args = 0, pretend = 0, frame = 0
+ 173              		@ frame_needed = 0, uses_anonymous_args = 0
+ 174              		@ link register save eliminated.
+  37:CircularBuffer.cpp ****    if (_write_block == false) {
+ 175              		.loc 1 37 4 view .LVU53
+ 176 0000 90F82530 		ldrb	r3, [r0, #37]	@ zero_extendqisi2
+ 177 0004 53B9     		cbnz	r3, .L8
+  38:CircularBuffer.cpp ****         if (_h < _buff_dim - 1 )
+ 178              		.loc 1 38 9 view .LVU54
+ 179              		.loc 1 38 28 is_stmt 0 view .LVU55
+ 180 0006 C168     		ldr	r1, [r0, #12]
+ 181              		.loc 1 38 13 view .LVU56
+ 182 0008 026A     		ldr	r2, [r0, #32]
+ 183              		.loc 1 38 28 view .LVU57
+ 184 000a 0139     		subs	r1, r1, #1
+ 185              		.loc 1 38 9 view .LVU58
+ 186 000c 8A42     		cmp	r2, r1
+ 187 000e 06D3     		bcc	.L12
+  39:CircularBuffer.cpp ****         {   
+  40:CircularBuffer.cpp ****             _h = (_h + 1);
+  41:CircularBuffer.cpp ****         } else {
+  42:CircularBuffer.cpp ****             _h = 0;
+ 188              		.loc 1 42 16 view .LVU59
+ 189 0010 1A46     		mov	r2, r3
+ 190              	.L10:
+  43:CircularBuffer.cpp ****         }
+  44:CircularBuffer.cpp ****         _buffer[_h] = input;
+ 191              		.loc 1 44 21 view .LVU60
+ 192 0012 0168     		ldr	r1, [r0]
+ 193 0014 0262     		str	r2, [r0, #32]
+ 194              		.loc 1 44 9 is_stmt 1 view .LVU61
+ 195              		.loc 1 44 21 is_stmt 0 view .LVU62
+ 196 0016 0B44     		add	r3, r3, r1
+ 197 0018 83ED000A 		vstr.32	s0, [r3]
+ 198              	.L8:
+  45:CircularBuffer.cpp ****     }
+  46:CircularBuffer.cpp **** }
+ 199              		.loc 1 46 1 view .LVU63
+ 200 001c 7047     		bx	lr
+ 201              	.L12:
+  40:CircularBuffer.cpp ****         } else {
+ 202              		.loc 1 40 13 is_stmt 1 view .LVU64
+  40:CircularBuffer.cpp ****         } else {
+ 203              		.loc 1 40 22 is_stmt 0 view .LVU65
+ 204 001e 0132     		adds	r2, r2, #1
+  44:CircularBuffer.cpp ****     }
+ 205              		.loc 1 44 19 view .LVU66
+ 206 0020 9300     		lsls	r3, r2, #2
+ 207 0022 F6E7     		b	.L10
+ 208              		.cfi_endproc
+ 209              	.LFE569:
+ 211              		.section	.text._ZN14CircularBuffer7SetModeENS_8ReadModeE,"ax",%progbits
+ 212              		.align	1
+ 213              		.p2align 2,,3
+ 214              		.global	_ZN14CircularBuffer7SetModeENS_8ReadModeE
+ 215              		.syntax unified
+ARM GAS  C:\Users\skipi\AppData\Local\Temp\cc4JrcnA.s 			page 6
+
+
+ 216              		.thumb
+ 217              		.thumb_func
+ 218              		.fpu fpv5-d16
+ 220              	_ZN14CircularBuffer7SetModeENS_8ReadModeE:
+ 221              	.LVL4:
+ 222              	.LFB570:
+  47:CircularBuffer.cpp **** 
+  48:CircularBuffer.cpp **** void CircularBuffer::SetMode(ReadMode mode)
+  49:CircularBuffer.cpp **** {
+ 223              		.loc 1 49 1 is_stmt 1 view -0
+ 224              		.cfi_startproc
+ 225              		@ args = 0, pretend = 0, frame = 0
+ 226              		@ frame_needed = 0, uses_anonymous_args = 0
+ 227              		@ link register save eliminated.
+  50:CircularBuffer.cpp ****     _mode = mode;
+ 228              		.loc 1 50 5 view .LVU68
+  51:CircularBuffer.cpp ****     if(mode == -1){
+ 229              		.loc 1 51 5 is_stmt 0 view .LVU69
+ 230 0000 A1F1FF33 		sub	r3, r1, #-1
+  50:CircularBuffer.cpp ****     _mode = mode;
+ 231              		.loc 1 50 11 view .LVU70
+ 232 0004 80F82410 		strb	r1, [r0, #36]
+ 233              		.loc 1 51 5 is_stmt 1 view .LVU71
+ 234 0008 B3FA83F3 		clz	r3, r3
+ 235 000c 5B09     		lsrs	r3, r3, #5
+ 236 000e 80F82530 		strb	r3, [r0, #37]
+  52:CircularBuffer.cpp ****         _write_block = true;
+  53:CircularBuffer.cpp **** 
+  54:CircularBuffer.cpp ****     }else {
+  55:CircularBuffer.cpp ****         _write_block = false;
+  56:CircularBuffer.cpp ****     }
+  57:CircularBuffer.cpp ****         
+  58:CircularBuffer.cpp **** }
+ 237              		.loc 1 58 1 is_stmt 0 view .LVU72
+ 238 0012 7047     		bx	lr
+ 239              		.cfi_endproc
+ 240              	.LFE570:
+ 242              		.section	.text._ZN14CircularBuffer4ReadEv,"ax",%progbits
+ 243              		.align	1
+ 244              		.p2align 2,,3
+ 245              		.global	_ZN14CircularBuffer4ReadEv
+ 246              		.syntax unified
+ 247              		.thumb
+ 248              		.thumb_func
+ 249              		.fpu fpv5-d16
+ 251              	_ZN14CircularBuffer4ReadEv:
+ 252              	.LVL5:
+ 253              	.LFB571:
+  59:CircularBuffer.cpp **** float CircularBuffer::Read() 
+  60:CircularBuffer.cpp **** {
+ 254              		.loc 1 60 1 is_stmt 1 view -0
+ 255              		.cfi_startproc
+ 256              		@ args = 0, pretend = 0, frame = 0
+ 257              		@ frame_needed = 0, uses_anonymous_args = 0
+ 258              		@ link register save eliminated.
+  61:CircularBuffer.cpp ****     float output = 0.0f;
+ 259              		.loc 1 61 5 view .LVU74
+ARM GAS  C:\Users\skipi\AppData\Local\Temp\cc4JrcnA.s 			page 7
+
+
+  62:CircularBuffer.cpp **** 
+  63:CircularBuffer.cpp ****     if (_h > 0 || _mode == 0)
+ 260              		.loc 1 63 5 view .LVU75
+ 261              		.loc 1 63 9 is_stmt 0 view .LVU76
+ 262 0000 026A     		ldr	r2, [r0, #32]
+ 263              		.loc 1 63 19 view .LVU77
+ 264 0002 90F92430 		ldrsb	r3, [r0, #36]
+ 265              		.loc 1 63 5 view .LVU78
+ 266 0006 02B9     		cbnz	r2, .L16
+ 267              		.loc 1 63 16 discriminator 1 view .LVU79
+ 268 0008 3BB9     		cbnz	r3, .L17
+ 269              	.L16:
+  64:CircularBuffer.cpp ****     {   
+  65:CircularBuffer.cpp ****         output = _buffer[_h];
+ 270              		.loc 1 65 9 is_stmt 1 view .LVU80
+ 271              		.loc 1 65 16 is_stmt 0 view .LVU81
+ 272 000a 0168     		ldr	r1, [r0]
+  66:CircularBuffer.cpp ****         _h = (_h + _mode);
+ 273              		.loc 1 66 18 view .LVU82
+ 274 000c 1344     		add	r3, r3, r2
+  65:CircularBuffer.cpp ****         _h = (_h + _mode);
+ 275              		.loc 1 65 16 view .LVU83
+ 276 000e 01EB8202 		add	r2, r1, r2, lsl #2
+ 277 0012 92ED000A 		vldr.32	s0, [r2]
+ 278              	.LVL6:
+ 279              		.loc 1 66 9 is_stmt 1 view .LVU84
+ 280 0016 0362     		str	r3, [r0, #32]
+  67:CircularBuffer.cpp ****     } else {
+  68:CircularBuffer.cpp ****         output = _buffer[_h];
+  69:CircularBuffer.cpp ****         _h = _buff_dim - 1;
+  70:CircularBuffer.cpp ****     }
+  71:CircularBuffer.cpp **** 
+  72:CircularBuffer.cpp ****     return output;
+ 281              		.loc 1 72 5 view .LVU85
+  73:CircularBuffer.cpp ****     
+  74:CircularBuffer.cpp **** }
+ 282              		.loc 1 74 1 is_stmt 0 view .LVU86
+ 283 0018 7047     		bx	lr
+ 284              	.LVL7:
+ 285              	.L17:
+  68:CircularBuffer.cpp ****         _h = _buff_dim - 1;
+ 286              		.loc 1 68 9 is_stmt 1 view .LVU87
+  69:CircularBuffer.cpp ****     }
+ 287              		.loc 1 69 24 is_stmt 0 view .LVU88
+ 288 001a C368     		ldr	r3, [r0, #12]
+  68:CircularBuffer.cpp ****         _h = _buff_dim - 1;
+ 289              		.loc 1 68 16 view .LVU89
+ 290 001c 0268     		ldr	r2, [r0]
+  69:CircularBuffer.cpp ****     }
+ 291              		.loc 1 69 24 view .LVU90
+ 292 001e 013B     		subs	r3, r3, #1
+  68:CircularBuffer.cpp ****         _h = _buff_dim - 1;
+ 293              		.loc 1 68 16 view .LVU91
+ 294 0020 92ED000A 		vldr.32	s0, [r2]
+ 295              	.LVL8:
+  69:CircularBuffer.cpp ****     }
+ 296              		.loc 1 69 9 is_stmt 1 view .LVU92
+ARM GAS  C:\Users\skipi\AppData\Local\Temp\cc4JrcnA.s 			page 8
+
+
+ 297 0024 0362     		str	r3, [r0, #32]
+  72:CircularBuffer.cpp ****     
+ 298              		.loc 1 72 5 view .LVU93
+ 299              		.loc 1 74 1 is_stmt 0 view .LVU94
+ 300 0026 7047     		bx	lr
+ 301              		.cfi_endproc
+ 302              	.LFE571:
+ 304              		.text
+ 305              	.Letext0:
+ 306              		.file 2 "c:\\program files\\daisytoolchain\\arm-none-eabi\\include\\machine\\_default_types.h"
+ 307              		.file 3 "c:\\program files\\daisytoolchain\\arm-none-eabi\\include\\sys\\_stdint.h"
+ 308              		.file 4 "c:\\program files\\daisytoolchain\\lib\\gcc\\arm-none-eabi\\10.2.1\\include\\stddef.h"
+ 309              		.file 5 "c:\\program files\\daisytoolchain\\arm-none-eabi\\include\\c++\\10.2.1\\cmath"
+ 310              		.file 6 "c:\\program files\\daisytoolchain\\arm-none-eabi\\include\\c++\\10.2.1\\bits\\std_abs.h"
+ 311              		.file 7 "c:\\program files\\daisytoolchain\\arm-none-eabi\\include\\c++\\10.2.1\\arm-none-eabi\\th
+ 312              		.file 8 "c:\\program files\\daisytoolchain\\arm-none-eabi\\include\\math.h"
+ 313              		.file 9 "c:\\program files\\daisytoolchain\\arm-none-eabi\\include\\c++\\10.2.1\\math.h"
+ 314              		.file 10 "CircularBuffer.h"
+ 315              		.file 11 "<built-in>"
+ARM GAS  C:\Users\skipi\AppData\Local\Temp\cc4JrcnA.s 			page 9
 
 
 DEFINED SYMBOLS
                             *ABS*:00000000 CircularBuffer.cpp
-C:\Users\skipi\AppData\Local\Temp\ccJdYT9p.s:17     .text._ZN14CircularBuffer4InitEPfj:00000000 $t
-C:\Users\skipi\AppData\Local\Temp\ccJdYT9p.s:26     .text._ZN14CircularBuffer4InitEPfj:00000000 _ZN14CircularBuffer4InitEPfj
-C:\Users\skipi\AppData\Local\Temp\ccJdYT9p.s:55     .text._ZN14CircularBuffer5WriteEf:00000000 $t
-C:\Users\skipi\AppData\Local\Temp\ccJdYT9p.s:63     .text._ZN14CircularBuffer5WriteEf:00000000 _ZN14CircularBuffer5WriteEf
-C:\Users\skipi\AppData\Local\Temp\ccJdYT9p.s:97     .text._ZN14CircularBuffer7SetModeENS_8ReadModeE:00000000 $t
-C:\Users\skipi\AppData\Local\Temp\ccJdYT9p.s:105    .text._ZN14CircularBuffer7SetModeENS_8ReadModeE:00000000 _ZN14CircularBuffer7SetModeENS_8ReadModeE
-C:\Users\skipi\AppData\Local\Temp\ccJdYT9p.s:128    .text._ZN14CircularBuffer4ReadEv:00000000 $t
-C:\Users\skipi\AppData\Local\Temp\ccJdYT9p.s:136    .text._ZN14CircularBuffer4ReadEv:00000000 _ZN14CircularBuffer4ReadEv
+C:\Users\skipi\AppData\Local\Temp\cc4JrcnA.s:17     .text._ZN14CircularBuffer4InitEPfjf:00000000 $t
+C:\Users\skipi\AppData\Local\Temp\cc4JrcnA.s:26     .text._ZN14CircularBuffer4InitEPfjf:00000000 _ZN14CircularBuffer4InitEPfjf
+C:\Users\skipi\AppData\Local\Temp\cc4JrcnA.s:69     .text._ZN14CircularBuffer11SetBuffSizeEfhf:00000000 $t
+C:\Users\skipi\AppData\Local\Temp\cc4JrcnA.s:77     .text._ZN14CircularBuffer11SetBuffSizeEfhf:00000000 _ZN14CircularBuffer11SetBuffSizeEfhf
+C:\Users\skipi\AppData\Local\Temp\cc4JrcnA.s:159    .text._ZN14CircularBuffer5WriteEf:00000000 $t
+C:\Users\skipi\AppData\Local\Temp\cc4JrcnA.s:167    .text._ZN14CircularBuffer5WriteEf:00000000 _ZN14CircularBuffer5WriteEf
+C:\Users\skipi\AppData\Local\Temp\cc4JrcnA.s:212    .text._ZN14CircularBuffer7SetModeENS_8ReadModeE:00000000 $t
+C:\Users\skipi\AppData\Local\Temp\cc4JrcnA.s:220    .text._ZN14CircularBuffer7SetModeENS_8ReadModeE:00000000 _ZN14CircularBuffer7SetModeENS_8ReadModeE
+C:\Users\skipi\AppData\Local\Temp\cc4JrcnA.s:243    .text._ZN14CircularBuffer4ReadEv:00000000 $t
+C:\Users\skipi\AppData\Local\Temp\cc4JrcnA.s:251    .text._ZN14CircularBuffer4ReadEv:00000000 _ZN14CircularBuffer4ReadEv
 
 NO UNDEFINED SYMBOLS
