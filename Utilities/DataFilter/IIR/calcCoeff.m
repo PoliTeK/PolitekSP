@@ -1,51 +1,57 @@
-%% Codice Matlab per il calcolo dei coefficienti di un IIR (Bessel & Butterworth)
+%% Codice Matlab per Export C++ IIR (Bessel & Butterworth 2nd/4th Order)
 clc
 clear
 
-fs = 200;                                               % frequenza di campionamento effettiva
-fc_bes = 5;                                             % frequenza di taglio desiderata Bessel
-fc_but = 4;                                             % frequenza di taglio desiderata Butterworth
-N = 2;                                                  % ordine del filtro
+fs = 200;           % Frequenza di campionamento
+fc_bes = 5;         % Cutoff Bessel
+fc_but = 4;         % Cutoff Butterworth
 
-% --- CALCOLO BUTTERWORTH ---
-Wn_but = fc_but / (fs/2);                               % Frequenza normalizzata
-[b_but, a_but] = butter(N, Wn_but, 'low');              % Calcolo Digitale
+% --- CALCOLO COEFFICIENTI ---
+[b_but2, a_but2] = butter(2, fc_but/(fs/2), 'low');
+[b_but4, a_but4] = butter(4, fc_but/(fs/2), 'low');
 
-% --- CALCOLO BESSEL ---
-Wo_bes = 2 * pi * fc_bes;                               % Freq angolare analogica
-[b_bes_s, a_bes_s] = besself(N, Wo_bes);                % Calcolo Analogico
-[b_bes, a_bes] = bilinear(b_bes_s, a_bes_s, fs);        % Conversione Digitale
+[b_bes_s2, a_bes_s2] = besself(2, 2*pi*fc_bes);
+[b_bes2, a_bes2] = bilinear(b_bes_s2, a_bes_s2, fs);
 
-% --- ESPORTAZIONE IN FORMATO C++ ---
+[b_bes_s4, a_bes_s4] = besself(4, 2*pi*fc_bes);
+[b_bes4, a_bes4] = bilinear(b_bes_s4, a_bes_s4, fs);
 
-fprintf('/* ===========================================================\n');
-fprintf(' * FILTER COEFFICIENTS EXPORT\n');
-fprintf(' * Fs = %d Hz\n', fs);
-fprintf(' * =========================================================== */\n\n');
+% --- GENERAZIONE OUTPUT C++ ---
+fprintf('/* Copia questo blocco nella sezione private di iir.h */\n\n');
 
-% 1. Stampa Butterworth
-fprintf('// Butterworth Low-Pass (Order: %d, Fc: %d Hz)\n', N, fc_but);
-fprintf('// b = numerator, a = denominator\n');
+% --- Butterworth 2nd ---
+print_block('Butterworth', 2, 'Butter', 'butter', b_but2, a_but2);
 
-fprintf('float butter_b[%d] = {', length(b_but));
-fprintf('%.8ff, ', b_but(1:end-1));
-fprintf('%.8ff};\n', b_but(end));
+% --- Butterworth 4th ---
+print_block('Butterworth', 4, 'Butter4', 'butter4', b_but4, a_but4);
 
-fprintf('float butter_a[%d] = {', length(a_but));
-fprintf('%.8ff, ', a_but(1:end-1));
-fprintf('%.8ff};\n', a_but(end));
+% --- Bessel 2nd ---
+print_block('Bessel', 2, 'Bessel', 'bessel', b_bes2, a_bes2);
 
-fprintf('\n');
+% --- Bessel 4th ---
+print_block('Bessel', 4, 'Bessel4', 'bessel4', b_bes4, a_bes4);
 
-% 2. Stampa Bessel
-fprintf('// Bessel Low-Pass (Order: %d, Fc: %d Hz)\n', N, fc_bes);
-fprintf('// b = numerator, a = denominator\n');
-
-fprintf('float bessel_b[%d] = {', length(b_bes));
-fprintf('%.8ff, ', b_bes(1:end-1));
-fprintf('%.8ff};\n', b_bes(end));
-
-fprintf('float bessel_a[%d] = {', length(a_bes));
-fprintf('%.8ff, ', a_bes(1:end-1));
-fprintf('%.8ff};\n', a_bes(end));
-
+%% Funzione di formattazione specifica
+function print_block(label, N, buffName, varName, b, a)
+    fprintf('    // --- %s %dnd Order ---\n', label, N);
+    fprintf('    static const int _%sORDER = %d;\n', buffName, N);
+    
+    % Numeratore b
+    fprintf('    float _%s_b[_%sORDER + 1] = {', varName, buffName);
+    for i = 1:length(b)-1
+        fprintf('%.8ff, ', b(i));
+    end
+    fprintf('%.8ff};\n', b(end));
+    
+    % Denominatore a
+    fprintf('    float _%s_a[_%sORDER + 1] = {', varName, buffName);
+    for i = 1:length(a)-1
+        fprintf('%.8ff, ', a(i));
+    end
+    fprintf('%.8ff};\n', a(end));
+    
+    % Buffer (sempre inizializzato a 0.0f)
+    buffList = repmat({'0.0f'}, 1, N);
+    buffStr = strjoin(buffList, ', ');
+    fprintf('    float _%s_buff[_%sORDER] = {%s};\n\n', buffName, buffName, buffStr);
+end
